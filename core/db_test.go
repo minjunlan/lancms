@@ -14,13 +14,18 @@ func TestConn(t *testing.T) {
 	if err2 != nil {
 		fmt.Printf("%v\n", err2)
 	}
-	fmt.Printf("%v\n", *db)
-	//db.Close()
-	var cols interface{}
-	for row.Next() {
-		row.Scan(cols)
-	}
+	var x1 = make([]interface{}, 4)
 
+	for row.Next() {
+		// cols, _ := row.Columns()
+
+		err := row.Scan(&x1[0], &x1[1], &x1[2], &x1[3])
+		if err != nil {
+			fmt.Printf("cols:%#v\n", err)
+		}
+
+	}
+	fmt.Printf("cols:%s\n", x1[3])
 	if err != nil {
 		t.Errorf("连接对象时出错:%s\n", err)
 	}
