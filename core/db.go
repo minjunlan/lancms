@@ -11,14 +11,12 @@ import (
 type DB struct {
 	db                    *sql.DB
 	dbname, dbuser, dbpwd string
-	data                  []map[string]interface{}
 }
 
 // Result 返回的结果
-type Result struct {
-}
+type Result []interface{}
 
-//连接数据库
+// Conn 连接数据库
 func (d *DB) Conn(dbname, dbuser, dbpwd string) (*DB, error) {
 	db, err := sql.Open("mysql", dbuser+":"+dbpwd+"@/"+dbname)
 	if err != nil {
@@ -32,24 +30,46 @@ func (d *DB) Conn(dbname, dbuser, dbpwd string) (*DB, error) {
 	return d, nil
 }
 
-//获取结果
-func (d *DB) Result() *DB {
-	fmt.Println("resuilt")
-	return d
+//Query 数据库操作语句
+func (d *DB) Query(s string, args ...interface{}) (*Result, error) {
+
+	rows, err := d.db.Query(s)
+	if err != nil {
+		return nil, err
+	}
+
+	columns, err := rows.Columns()
+	if err != nil {
+		return nil, err
+	}
+	fmt.Printf("%#v\n", columns)
+	values := make([]sql.RawBytes, len(columns))
+	scanArgs := make([]interface{}, len(columns))
+	for i := range values {
+		scanArgs[i] = &values[i]
+	}
+
+	var arr Result
+
+	for rows.Next() {
+		arr1 := make(map[string]interface{}, len(columns))
+		err = rows.Scan(scanArgs...)
+		if err != nil {
+			return nil, err
+		}
+		for i, col := range values {
+			arr1[columns[i]] = string(col)
+		}
+		arr = append(arr, arr1)
+	}
+	return &arr, nil
 }
 
-func (d *DB) Insert(sql string, args ...interface{}) *Result {
-
+// Close 关闭数据库连接
+func (d *DB) Close() {
+	d.db.Close()
 }
-func (d *DB) Select(sql string, args ...interface{}) *Result {
 
-}
-func (d *DB) Delete(sql string, args ...interface{}) *Result {
-
-}
-func (d *DB) Update(sql string, args ...interface{}) *Result {
-
-}
 func init() {
 	fmt.Print("chu shi hau")
 }
