@@ -20,8 +20,8 @@ import (
 // }
 
 func TestQuery(t *testing.T) {
-	var db = new(DB)
-	conn, _ := db.Conn("test", "root", "root")
+
+	conn, _ := Conn("test", "root", "root")
 
 	data, err := conn.Query(`insert into test(name,age,talk) values("王五",27,"他是他各大")`)
 

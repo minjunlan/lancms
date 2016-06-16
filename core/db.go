@@ -14,10 +14,10 @@ type DB struct {
 }
 
 // Result 返回的结果
-type Result []interface{}
+type Result []map[string]interface{}
 
 // Conn 连接数据库
-func (d *DB) Conn(dbname, dbuser, dbpwd string) (*DB, error) {
+func Conn(dbname, dbuser, dbpwd string) (*DB, error) {
 	db, err := sql.Open("mysql", dbuser+":"+dbpwd+"@/"+dbname)
 	if err != nil {
 		return nil, err
@@ -26,6 +26,7 @@ func (d *DB) Conn(dbname, dbuser, dbpwd string) (*DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	d := new(DB)
 	d.db = db
 	return d, nil
 }
@@ -42,7 +43,7 @@ func (d *DB) Query(s string, args ...interface{}) (*Result, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("%#v\n", columns)
+
 	values := make([]sql.RawBytes, len(columns))
 	scanArgs := make([]interface{}, len(columns))
 	for i := range values {
