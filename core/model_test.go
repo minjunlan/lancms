@@ -6,6 +6,7 @@ import (
 )
 
 func TestM(t *testing.T) {
+	SetDNS("test", "root", "root")
 	m, err := M("test")
 
 	if err != nil {
