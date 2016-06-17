@@ -1,4 +1,4 @@
-package lan
+package core
 
 import (
 	"fmt"
