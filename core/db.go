@@ -2,7 +2,6 @@ package lan
 
 import (
 	"database/sql"
-	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -72,5 +71,5 @@ func (d *DB) Close() {
 }
 
 func init() {
-	fmt.Print("chu shi hau")
+
 }
