@@ -3,8 +3,6 @@ package lan
 import (
 	"errors"
 	"fmt"
-	"log"
-	"os"
 	"strconv"
 	"strings"
 )
@@ -268,30 +266,36 @@ func (m *Model) getCols(cols *Result) []string {
 	return s
 }
 
-func init() {
-	if dbname == "" {
-		data := make([]byte, 100)
-		f, err := os.Open("../conf/db.conf")
-		if err != nil {
-			fmt.Errorf("读文件出错:%#v", err)
-		}
-		count, err := f.Read(data)
-		if err != nil {
-			log.Fatal(err)
-		}
-		s := strings.Split(string(data[:count]), "\r\n")
-		for i := 0; i < len(s); i++ {
-			t := strings.Split(s[i], ":")
-			if t[0] == "dbname" {
-				dbname = t[1]
-			}
-			if t[0] == "dbuser" {
-				dbuser = t[1]
-			}
-			if t[0] == "dbpwd" {
-				dbpwd = t[1]
-			}
-		}
-
-	}
+func SetDNS(name, user, pwd string) {
+	dbname = name
+	dbuser = user
+	dbpwd = pwd
 }
+
+// func init() {
+// 	if dbname == "" {
+// 		data := make([]byte, 100)
+// 		f, err := os.Open("../conf/db.conf")
+// 		if err != nil {
+// 			fmt.Errorf("读文件出错:%#v", err)
+// 		}
+// 		count, err := f.Read(data)
+// 		if err != nil {
+// 			log.Fatal(err)
+// 		}
+// 		s := strings.Split(string(data[:count]), "\r\n")
+// 		for i := 0; i < len(s); i++ {
+// 			t := strings.Split(s[i], ":")
+// 			if t[0] == "dbname" {
+// 				dbname = t[1]
+// 			}
+// 			if t[0] == "dbuser" {
+// 				dbuser = t[1]
+// 			}
+// 			if t[0] == "dbpwd" {
+// 				dbpwd = t[1]
+// 			}
+// 		}
+
+// 	}
+// }
